@@ -1,0 +1,12 @@
+{
+    "projectId": "appmaria-cantaish",
+    "sql": {
+        "user": "cantaish",
+        "password": "554860Ti",
+        "database": "cantaish",
+        "socketPath": "/cloudsql/appmaria-cantaish:southamerica-east1:database"
+    },
+    "mundipagg": {
+        "id": "sk_test_769MDeEYHLF3DrVk"
+    }
+}

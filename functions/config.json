@@ -1,12 +1,9 @@
 {
-    "projectId": "appmaria-cantaish",
+    "projectId": "carona-prime",
     "sql": {
-        "user": "cantaish",
-        "password": "554860Ti",
-        "database": "cantaish",
-        "socketPath": "/cloudsql/appmaria-cantaish:southamerica-east1:database"
-    },
-    "mundipagg": {
-        "id": "sk_test_769MDeEYHLF3DrVk"
+        "user": "root",
+        "password": "CaronaPrime2020",
+        "database": "caronaprime",
+        "socketPath": "/cloudsql/carona-prime-9f9fb:us-central1:carona-prime"
     }
 }

@@ -15,7 +15,7 @@
     "email-deep-validator": "^3.3.0",
     "firebase-admin": "~7.0.0",
     "firebase-functions": "^3.0.2",
-    "helmet": "^3.16.0",
+    "helmet": "^3.21.2",
     "jsonwebtoken": "^8.5.1",
     "jwt": "file:lib/jwt",
     "moment": "^2.24.0",
@@ -28,6 +28,6 @@
   },
   "private": true,
   "engines": {
-    "node": "8"
+    "node": "12"
   }
 }

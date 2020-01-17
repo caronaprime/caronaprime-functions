@@ -1,6 +1,7 @@
 {
     "projectId": "carona-prime",
     "sql": {
+        "host": "34.68.132.157",
         "user": "root",
         "password": "CaronaPrime2020",
         "database": "caronaprime",

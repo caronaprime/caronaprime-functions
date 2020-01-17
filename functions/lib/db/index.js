@@ -17,12 +17,24 @@ if (!(config &&
     throw "SQL Error: SQL configuration is not available. Please, enter the settings in config.json file."
 }
 
-const mysqlConfig = {
-    connectionLimit: 1,
-    user: config.sql.user,
-    password: config.sql.password,
-    database: config.sql.database,
-    socketPath: config.sql.socketPath
+var mysqlConfig = null;
+
+if (process.env.GCLOUD_PROJECT !== undefined) {
+    mysqlConfig = {
+        connectionLimit: 1,
+        user: config.sql.user,
+        password: config.sql.password,
+        database: config.sql.database,
+        socketPath: config.sql.socketPath
+    }
+} else {
+    mysqlConfig = {
+        host: config.sql.host,
+        connectionLimit: 1,
+        user: config.sql.user,
+        password: config.sql.password,
+        database: config.sql.database
+    }
 }
 
 // Módulo

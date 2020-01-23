@@ -5,7 +5,8 @@ class Usuario extends Model {
         super.init({
             id: {
                 type: DataTypes.INTEGER,
-                primaryKey: true
+                primaryKey: true,
+                autoIncrement: true
             },
             nome: DataTypes.STRING,
             celular: DataTypes.STRING,

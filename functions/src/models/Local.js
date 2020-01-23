@@ -5,18 +5,19 @@ class Local extends Model {
         super.init({
             id: {
                 type: DataTypes.INTEGER,
-                primaryKey: true
+                primaryKey: true,
+                autoIncrement: true
             },
             nome: DataTypes.STRING,
             latitude: DataTypes.DOUBLE,
             longitude: DataTypes.DOUBLE,
             placeId: DataTypes.STRING,
         }, {
-            tableName: 'Locais',            
+            tableName: 'Locais',
             sequelize
         })
-    } 
-    
+    }
+
 }
 
 module.exports = Local;

@@ -17,5 +17,6 @@ MembroGrupo.init(connection);
 
 Grupo.associate(connection.models);
 LatLong.associate(connection.models);
+MembroGrupo.associate(connection.models);
 
 module.exports = connection;

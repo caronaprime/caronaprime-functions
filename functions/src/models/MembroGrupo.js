@@ -11,12 +11,13 @@ class MembroGrupo extends Model {
                 type: DataTypes.BOOLEAN,
             }
         }, {
-            sequelize            
+            sequelize
         })
     }
 
     static associate(models) {
         this.belongsTo(models.Grupo, { foreignKey: 'grupoId', as: 'membroGrupos' });
+        this.belongsTo(models.Usuario, { foreignKey: 'usuarioId', as: 'membroGruposUsuario' });
     }
 }
 

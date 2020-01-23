@@ -15,7 +15,7 @@ class LatLong extends Model {
     }
 
     static associate(models) {
-        this.belongsTo(models.Grupo, { foreignKey: 'grupoId', as: 'grupo_latlong' });        
+        this.belongsTo(models.Grupo, { foreignKey: 'grupoId', as: 'grupo_latlong' });                
     }
 }
 

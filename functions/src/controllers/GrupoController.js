@@ -55,7 +55,7 @@ module.exports = {
         });
         LatLong.bulkCreate(teste);
 
-        return res.json(grupo);
+        return res.json(grupo); 
     }
 
 }

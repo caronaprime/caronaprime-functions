@@ -36,7 +36,7 @@ async function inserirMembrosGrupos(membrosGrupos, grupoId) {
 
 module.exports = {
     async index(req, res) {
-        const grupos = await Grupo.findAll({ include: [MembroGrupo, LatLong, { model: Local, as: 'partidaGrupo' }, { model: Local, as: 'destinoGrupo' }] });
+        const grupos = await Grupo.findAll({ include: [{ model: Local, as: 'partidaGrupo' }, { model: Local, as: 'destinoGrupo' }] });
         return res.json(grupos);
     },
 
@@ -55,7 +55,7 @@ module.exports = {
         });
         LatLong.bulkCreate(teste);
 
-        return res.json(grupo); 
+        return res.json(grupo);
     }
 
 }

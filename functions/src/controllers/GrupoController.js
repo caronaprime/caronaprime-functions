@@ -41,21 +41,26 @@ module.exports = {
     },
 
     async store(req, res) {
-        const { nome, MembroGrupos, LatLongs, partidaGrupo, destinoGrupo } = req.body;
+        try {
+            const { nome, MembroGrupos, LatLongs, partidaGrupo, destinoGrupo } = req.body;
 
-        const partida = await Local.create({ ...partidaGrupo });
-        const destino = await Local.create({ ...destinoGrupo });
+            const partida = await Local.create({ ...partidaGrupo });
+            const destino = await Local.create({ ...destinoGrupo });
 
-        const grupo = await Grupo.create({ nome, partidaId: partida.id, destinoId: destino.id });
+            const grupo = await Grupo.create({ nome, partidaId: partida.id, destinoId: destino.id });
 
-        await inserirMembrosGrupos(MembroGrupos, grupo.id);
+            await inserirMembrosGrupos(MembroGrupos, grupo.id);
 
-        const teste = LatLongs.map(lg => {
-            return { ...lg, grupoId: grupo.id }
-        });
-        LatLong.bulkCreate(teste);
+            const teste = LatLongs.map(lg => {
+                return { ...lg, grupoId: grupo.id }
+            });
+            LatLong.bulkCreate(teste);
 
-        return res.json(grupo);
+            return res.json(grupo);
+        } catch (error) {
+            res.status(500).send(error);
+        }
+
     }
 
 }

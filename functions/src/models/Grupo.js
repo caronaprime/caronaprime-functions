@@ -17,8 +17,10 @@ class Grupo extends Model {
     static associate(models) {
         this.belongsTo(models.Local, { foreignKey: 'partidaId', as: 'partidaGrupo' });
         this.belongsTo(models.Local, { foreignKey: 'destinoId', as: 'destinoGrupo' });
-        this.hasMany(models.LatLong),
-            this.hasMany(models.MembroGrupo)
+        this.hasMany(models.LatLong);
+        this.hasMany(models.MembroGrupo);     
+        this.hasMany(models.OfertaCarona); 
+        this.hasMany(models.Carona);        
     }
 }
 

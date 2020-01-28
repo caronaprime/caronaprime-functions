@@ -3,6 +3,8 @@ const MembroGrupo = require('../models/MembroGrupo');
 const Local = require('../models/Local');
 const LatLong = require('../models/LatLong');
 const Usuario = require('../models/Usuario');
+const OfertaCarona = require('../models/OfertaCarona');
+const Carona = require('../models/Carona');
 
 async function buscarUsuarioId(usuario) {
     let usuarioId = usuario.UsuarioId;
@@ -36,8 +38,18 @@ async function inserirMembrosGrupos(membrosGrupos, grupoId) {
 
 module.exports = {
     async index(req, res) {
-        const grupos = await Grupo.findAll({ include: [{ model: Local, as: 'partidaGrupo' }, { model: Local, as: 'destinoGrupo' }] });
+        const grupos = await Grupo.findAll({ include: [OfertaCarona, { model: Local, as: 'partidaGrupo' }, { model: Local, as: 'destinoGrupo' }] });
         return res.json(grupos);
+    },
+    async getById(req, res) {
+        try {
+            const grupo = await Grupo.findByPk(req.params.id, {
+                include: [MembroGrupo, Carona, LatLong, { model: Local, as: 'partidaGrupo' }, { model: Local, as: 'destinoGrupo' }]
+            })
+            return res.json(grupo);
+        } catch (error) {
+            res.status(500).send(error);
+        }
     },
 
     async store(req, res) {

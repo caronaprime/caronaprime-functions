@@ -42,6 +42,39 @@ module.exports = {
         const grupos = await Grupo.findAll({ include: [OfertaCarona, { model: Local, as: 'partidaGrupo' }, { model: Local, as: 'destinoGrupo' }] });
         return res.json(grupos);
     },
+    async compartilharCarona(req, res) {
+        try {
+            const body = req.body;
+            let oferta = await OfertaCarona.findOne({
+                where: {
+                    usuarioId: body.usuarioId,
+                    grupoId: body.grupoId
+                }
+            });
+            if (!oferta) {
+                await OfertaCarona.create(body);
+            }
+            else {
+                oferta.portaMalasLivre = body.portaMalasLivre;
+                oferta.carroAdaptado = body.carroAdaptado;
+                oferta.hora = body.hora;
+                oferta.minuto = body.minuto;
+                oferta.totalVagas = body.totalVagas;
+                oferta.domingo = body.domingo;
+                oferta.segunda = body.segunda;
+                oferta.terca = body.terca;
+                oferta.quarta = body.quarta;
+                oferta.quinta = body.quinta;
+                oferta.sexta = body.sexta;
+                oferta.sabado = body.sabado;
+
+                await oferta.save();
+            }
+            return res.status(201).send(oferta);
+        } catch (error) {
+            return res.status(500).send(error);
+        }
+    },
     async getById(req, res) {
         try {
             let grupo = await Grupo.findByPk(req.params.id, {

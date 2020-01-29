@@ -23,8 +23,12 @@ module.exports = {
         onDelete: 'CASCADE'
       },
       hora: {
-        type: Sequelize.TIME,
+        type: Sequelize.INTEGER,
         allowNull: false
+      },
+      minuto: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
       },
       totalVagas: {
         type: Sequelize.INTEGER,
@@ -40,41 +44,41 @@ module.exports = {
         allowNull: false,
         defaultValue: false
       },
-      domingo:{
+      domingo: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
         defaultValue: false
       },
-      segunda:{
+      segunda: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
         defaultValue: false
       },
-      terca:{
+      terca: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
         defaultValue: false
       },
-      quarta:{
+      quarta: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
         defaultValue: false
       },
-      quinta:{
+      quinta: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
         defaultValue: false
       },
-      sexta:{
+      sexta: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
         defaultValue: false
       },
-      sabado:{
+      sabado: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
         defaultValue: false
-      },      
+      },
       createdAt: {
         type: Sequelize.DATE,
         allowNull: false

@@ -9,6 +9,7 @@ const routes = express.Router();
 routes.post('/grupos', GrupoController.store);
 routes.get('/grupos', GrupoController.index);
 routes.get('/grupos/:id', GrupoController.getById)
+routes.post('/grupos/compartilhar-carona', GrupoController.compartilharCarona)
 
 routes.post('/usuarios', UsuarioController.store);
 routes.get('/usuarios', UsuarioController.index);

@@ -10,7 +10,8 @@ class OfertaCarona extends Model {
             },
             portaMalasLivre: DataTypes.BOOLEAN,
             carroAdaptado: DataTypes.BOOLEAN,
-            hora: DataTypes.TIME,
+            hora: DataTypes.INTEGER,
+            minuto: DataTypes.INTEGER,
             totalVagas: DataTypes.INTEGER,
             domingo: DataTypes.BOOLEAN,
             segunda: DataTypes.BOOLEAN,
@@ -24,9 +25,9 @@ class OfertaCarona extends Model {
         })
     }
 
-    static associate(models){
+    static associate(models) {
         this.belongsTo(models.Grupo, { foreignKey: 'grupoId', as: 'ofertaCaronaGrupos' });
-        this.belongsTo(models.Usuario, { foreignKey: 'usuarioId', as: 'ofertaUsuarios'});
+        this.belongsTo(models.Usuario, { foreignKey: 'usuarioId', as: 'ofertaUsuarios' });
     }
 }
 

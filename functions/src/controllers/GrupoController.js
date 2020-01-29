@@ -8,16 +8,17 @@ const Carona = require('../models/Carona');
 
 async function buscarUsuarioId(usuario) {
     let usuarioId = usuario.UsuarioId;
+    const celular = usuario.celular.match(/\d+/g).join('');
     if (!usuarioId) {
         const usuarioExiste = await Usuario.findOne({
             where: {
-                celular: usuario.celular
+                celular: celular
             }
         })
         if (usuarioExiste)
             return usuarioExiste.id;
 
-        const u = await Usuario.create({ celular: usuario.celular });
+        const u = await Usuario.create({ celular, nome: usuario.nome });
         return u.id;
     }
     return usuarioId;
@@ -43,10 +44,41 @@ module.exports = {
     },
     async getById(req, res) {
         try {
-            const grupo = await Grupo.findByPk(req.params.id, {
+            let grupo = await Grupo.findByPk(req.params.id, {
                 include: [MembroGrupo, Carona, LatLong, { model: Local, as: 'partidaGrupo' }, { model: Local, as: 'destinoGrupo' }]
             })
-            return res.json(grupo);
+            const usuariosIds = grupo.MembroGrupos.map(mg => mg.usuarioId);
+            const usuarios = await Usuario.findAll({
+                where: {
+                    id: usuariosIds
+                }
+            })
+            const membrosgrupos = [];
+            for (const membroGrupo of grupo.MembroGrupos) {
+                const usuario = usuarios.find(t => t.id == membroGrupo.usuarioId);
+                membrosgrupos.push({
+                    id: membroGrupo.id,
+                    administrador: membroGrupo.administrador,
+                    grupoId: membroGrupo.id,
+                    usuario: {
+                        celular: usuario.celular,
+                        nome: usuario.nome,
+                        id: usuario.id
+                    }
+                });
+            }
+            const retorno = {
+                Caronas: grupo.Caronas,
+                LatLongs: grupo.LatLongs,
+                destinoGrupo: grupo.destinoGrupo,
+                destinoId: grupo.destinoId,
+                id: grupo.id,
+                MembroGrupos: membrosgrupos,
+                nome: grupo.nome,
+                partidaGrupo: grupo.partidaGrupo,
+                partidaId: grupo.partidaId
+            };
+            return res.json(retorno);
         } catch (error) {
             res.status(500).send(error);
         }

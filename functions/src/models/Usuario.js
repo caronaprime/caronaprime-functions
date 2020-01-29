@@ -10,6 +10,7 @@ class Usuario extends Model {
             },
             nome: DataTypes.STRING,
             celular: DataTypes.STRING,
+            userId: DataTypes.STRING
         }, {
             sequelize
         })

@@ -7,12 +7,14 @@ const OfertaCaronaController = require('../src/controllers/OfertaCaronaControlle
 const routes = express.Router();
 
 routes.post('/grupos', GrupoController.store);
-routes.get('/grupos', GrupoController.index);
+// routes.get('/grupos', GrupoController.index);
 routes.get('/grupos/:id', GrupoController.getById)
+routes.post('/grupos/sair', GrupoController.sair)
 routes.post('/grupos/compartilhar-carona', GrupoController.compartilharCarona)
 
 routes.post('/usuarios', UsuarioController.store);
 routes.get('/usuarios', UsuarioController.index);
+routes.get('/usuarios/:id/grupos', UsuarioController.grupos)
 routes.post('/usuarios/buscar-ou-criar', UsuarioController.buscarOuCriar)
 
 routes.post('/locais', LocalController.store);

@@ -41,18 +41,6 @@ async function inserirMembrosGrupos(membrosGrupos, grupoId) {
 }
 
 module.exports = {
-    async index(req, res) {
-        try {
-            const grupos = await Grupo.findAll({
-                include: [{ model: Local, as: 'partidaGrupo' }, { model: Local, as: 'destinoGrupo' }, MembroGrupo], where: {
-                    '$MembroGrupos.usuarioId$': req.body.usuarioId
-                }
-            });
-            return res.json(grupos);
-        } catch (error) {
-            return res.status(500).send(error);
-        }
-    },
     async compartilharCarona(req, res) {
         try {
             const body = req.body;
@@ -84,6 +72,16 @@ module.exports = {
             return res.status(201).send(oferta);
         } catch (error) {
             return res.status(500).send(error);
+        }
+    },
+
+    async sair(req, res) {
+        try {
+            const { usuarioId, grupoId } = req.body;
+            await MembroGrupo.destroy({ where: { usuarioId: usuarioId, grupoId: grupoId } });
+            return res.json({ success: true });
+        } catch (error) {
+            res.status(500).send(error);
         }
     },
     async getById(req, res) {

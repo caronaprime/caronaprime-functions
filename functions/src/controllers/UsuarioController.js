@@ -1,5 +1,7 @@
 const Usuario = require('../models/Usuario');
 const Grupo = require('../models/Grupo');
+const Local = require('../models/Local');
+const MembroGrupo = require('../models/MembroGrupo');
 
 module.exports = {
     async index(req, res) {
@@ -53,5 +55,17 @@ module.exports = {
             grupoId
         });
         return res.json(usuario);
-    }
+    },
+    async grupos(req, res) {
+        try {
+            const grupos = await Grupo.findAll({
+                include: [{ model: Local, as: 'partidaGrupo' }, { model: Local, as: 'destinoGrupo' }, MembroGrupo], where: {
+                    '$MembroGrupos.usuarioId$': req.params.id
+                }
+            });
+            return res.json(grupos);
+        } catch (error) {
+            return res.status(500).send(error);
+        }
+    },
 }

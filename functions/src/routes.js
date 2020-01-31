@@ -13,6 +13,7 @@ routes.post('/grupos/compartilhar-carona', GrupoController.compartilharCarona)
 
 routes.post('/usuarios', UsuarioController.store);
 routes.get('/usuarios', UsuarioController.index);
+routes.post('/usuarios/buscar-ou-criar', UsuarioController.buscarOuCriar)
 
 routes.post('/locais', LocalController.store);
 routes.get('/locais', LocalController.index);

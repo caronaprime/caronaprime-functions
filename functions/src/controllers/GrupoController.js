@@ -8,7 +8,10 @@ const Carona = require('../models/Carona');
 
 async function buscarUsuarioId(usuario) {
     let usuarioId = usuario.UsuarioId;
-    const celular = usuario.celular.match(/\d+/g).join('');
+    let celular = usuario.celular.match(/\d+/g).join('');
+    if (celular.length > 11)
+        celular = celular.substring(celular.length - 11);
+
     if (!usuarioId) {
         const usuarioExiste = await Usuario.findOne({
             where: {
@@ -39,8 +42,16 @@ async function inserirMembrosGrupos(membrosGrupos, grupoId) {
 
 module.exports = {
     async index(req, res) {
-        const grupos = await Grupo.findAll({ include: [OfertaCarona, { model: Local, as: 'partidaGrupo' }, { model: Local, as: 'destinoGrupo' }] });
-        return res.json(grupos);
+        try {
+            const grupos = await Grupo.findAll({
+                include: [{ model: Local, as: 'partidaGrupo' }, { model: Local, as: 'destinoGrupo' }, MembroGrupo], where: {
+                    '$MembroGrupos.usuarioId$': req.body.usuarioId
+                }
+            });
+            return res.json(grupos);
+        } catch (error) {
+            return res.status(500).send(error);
+        }
     },
     async compartilharCarona(req, res) {
         try {

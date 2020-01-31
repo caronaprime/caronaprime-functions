@@ -8,8 +8,38 @@ module.exports = {
 
     },
 
+    async buscarOuCriar(req, res) {
+        try {
+            let numeroFormatado = req.body.numero.match(/\d+/g).join('');
+            if (numeroFormatado.length > 11)
+                numeroFormatado = numeroFormatado.substring(numeroFormatado.length - 11);
+
+
+            let usuario = await Usuario.findOne({
+                where: {
+                    celular: numeroFormatado
+                }
+            });
+            if (usuario) {
+                usuario.userId = req.body.userId;
+                await usuario.save();
+                return res.json(usuario);
+            }
+
+            const usuarioCriado = await Usuario.create({
+                nome: req.body.nome,
+                celular: numeroFormatado,
+                userId: req.body.userId
+            });
+
+            return res.json(usuarioCriado);
+        } catch (error) {
+            res.status(500).send(error);
+        }
+
+    },
+
     async store(req, res) {
-        // const {a} = req.params;
         const { grupoId: grupoId, nome, celular } = req.body;
         const grupo = await Grupo.findByPk(grupoId);
 

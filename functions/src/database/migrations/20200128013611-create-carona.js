@@ -8,9 +8,9 @@ module.exports = {
         primaryKey: true,
         autoIncrement: true
       },
-      ofertaCaronaId:{
+      ofertaCaronaId: {
         type: Sequelize.INTEGER,
-        allowNull: false        
+        allowNull: false
       },
       grupoId: {
         type: Sequelize.INTEGER,
@@ -19,15 +19,23 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       },
-      motoristaId: {
+      usuarioId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: { model: 'Usuarios', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       },
-      dataHora: {
+      data: {
         type: Sequelize.DATE,
+        allowNull: false
+      },
+      hora: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+      },
+      minuto: {
+        type: Sequelize.INTEGER,
         allowNull: false
       },
       totalVagas: {

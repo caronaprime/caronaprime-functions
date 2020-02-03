@@ -40,7 +40,56 @@ async function inserirMembrosGrupos(membrosGrupos, grupoId) {
     await MembroGrupo.bulkCreate(membros);
 }
 
+function podeEsseDiaDaSemana(oferta, data) {
+    const dia = data.getDay();
+    if (dia == 0) return oferta.domingo;
+    if (dia == 1) return oferta.segunda;
+    if (dia == 2) return oferta.terca;
+    if (dia == 3) return oferta.quarta;
+    if (dia == 4) return oferta.quinta;
+    if (dia == 5) return oferta.sexta;
+    if (dia == 6) return oferta.sabado;
+    return false;
+}
+
+async function gerarCarona(oferta, dias) {
+    const currentDate = new Date();
+    const umDiaEmMs = 86400000;
+
+
+    for (let i = 0; i < dias; i++) {
+        let endDate = new Date(currentDate.getTime() + ((i + 1) * umDiaEmMs));
+        if (podeEsseDiaDaSemana(oferta, endDate)) {
+            const existeCarona = await Carona.findAll({ where: { ofertaCaronaId: oferta.id, data: endDate } });
+            if (!existeCarona || existeCarona.length == 0) {
+                await Carona.create({
+                    data: endDate,
+                    hora: oferta.hora,
+                    minuto: oferta.minuto,
+                    totalVagas: oferta.totalVagas,
+                    portaMalasLivre: oferta.portaMalasLivre,
+                    carroAdaptado: oferta.carroAdaptado,
+                    ofertaCaronaId: oferta.id,
+                    grupoId: oferta.grupoId,
+                    usuarioId: oferta.usuarioId
+                });
+            }
+        }
+    }
+}
+
 module.exports = {
+    async gerarCaronas(req, res) {
+        try {
+            const todasOfertas = await OfertaCarona.findAll();
+            for (const oferta of todasOfertas) {
+                gerarCarona(oferta, 7);
+            }
+            return res.status(201).send(true);
+        } catch (error) {
+            return res.status(500).send(error);
+        }
+    },
     async adicionarMembros(req, res) {
         try {
             const body = req.body;
@@ -96,7 +145,7 @@ module.exports = {
     async getById(req, res) {
         try {
             let grupo = await Grupo.findByPk(req.params.id, {
-                include: [MembroGrupo, Carona, LatLong, { model: Local, as: 'partidaGrupo' }, { model: Local, as: 'destinoGrupo' }]
+                include: [MembroGrupo, LatLong, { model: Local, as: 'partidaGrupo' }, { model: Local, as: 'destinoGrupo' }]
             })
             const usuariosIds = grupo.MembroGrupos.map(mg => mg.usuarioId);
             const usuarios = await Usuario.findAll({
@@ -118,8 +167,10 @@ module.exports = {
                     }
                 });
             }
+            const caronas = await Carona.findAll({ where: { grupoId: req.params.id }, include: [{ model: Usuario, as: 'caronaMotorista' }] })
+
             const retorno = {
-                Caronas: grupo.Caronas,
+                Caronas: caronas,
                 LatLongs: grupo.LatLongs,
                 destinoGrupo: grupo.destinoGrupo,
                 destinoId: grupo.destinoId,

@@ -8,17 +8,21 @@ class Carona extends Model {
                 primaryKey: true,
                 autoIncrement: true
             },
-            dataHora: DataTypes.DATE,
+            data: DataTypes.DATE,
+            hora: DataTypes.INTEGER,
+            minuto: DataTypes.INTEGER,
             totalVagas: DataTypes.INTEGER,
             portaMalasLivre: DataTypes.BOOLEAN,
             carroAdaptado: DataTypes.BOOLEAN,
+            ofertaCaronaId: DataTypes.INTEGER
         }, {
             sequelize
         })
     }
 
     static associate(models) {
-        this.belongsTo(models.Grupo);
+        this.belongsTo(models.Grupo, { foreignKey: 'grupoId', as: 'caronaGrupo' });    
+        this.belongsTo(models.Usuario, { foreignKey: 'usuarioId', as: 'caronaMotorista' });        
         this.hasMany(models.UsuarioCarona);
     }
 }

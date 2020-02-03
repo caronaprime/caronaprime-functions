@@ -41,6 +41,15 @@ async function inserirMembrosGrupos(membrosGrupos, grupoId) {
 }
 
 module.exports = {
+    async adicionarMembros(req, res) {
+        try {
+            const body = req.body;
+            await inserirMembrosGrupos(body.MembroGrupos, body.grupoId);
+            return res.status(201).send(true);
+        } catch (error) {
+            return res.status(500).send(error);
+        }
+    },
     async compartilharCarona(req, res) {
         try {
             const body = req.body;

@@ -11,6 +11,7 @@ routes.post('/grupos', GrupoController.store);
 routes.get('/grupos/:id', GrupoController.getById)
 routes.post('/grupos/sair', GrupoController.sair)
 routes.post('/grupos/compartilhar-carona', GrupoController.compartilharCarona)
+routes.post('/grupos/adicionar-membros', GrupoController.adicionarMembros)
 
 routes.post('/usuarios', UsuarioController.store);
 routes.get('/usuarios', UsuarioController.index);

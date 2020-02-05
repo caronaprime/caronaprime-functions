@@ -83,7 +83,7 @@ async function gerarCarona(oferta, dias) {
 module.exports = {
     async gerarCaronas(req, res) {
         try {
-            const todasOfertas = await OfertaCarona.findAll();
+            const todasOfertas = await OfertaCarona.findAll({ where: { repetirSemanalmente: true } });
             for (const oferta of todasOfertas) {
                 gerarCarona(oferta, 7);
             }
@@ -111,7 +111,8 @@ module.exports = {
                 }
             });
             if (!oferta) {
-                await OfertaCarona.create(body);
+                const oferta = await OfertaCarona.create(body);
+                await gerarCarona(oferta, 4);
             }
             else {
                 oferta.portaMalasLivre = body.portaMalasLivre;
@@ -126,6 +127,7 @@ module.exports = {
                 oferta.quinta = body.quinta;
                 oferta.sexta = body.sexta;
                 oferta.sabado = body.sabado;
+                oferta.repetirSemanalmente = body.repetirSemanalmente;
 
                 await oferta.save();
             }
@@ -140,6 +142,15 @@ module.exports = {
             const { usuarioId, grupoId } = req.body;
             await MembroGrupo.destroy({ where: { usuarioId: usuarioId, grupoId: grupoId } });
             return res.json({ success: true });
+        } catch (error) {
+            res.status(500).send(error);
+        }
+    },
+    async getOferta(req, res) {
+        try {
+            const { usuarioId, id } = req.params;
+            const oferta = await OfertaCarona.findOne({ where: { usuarioId: usuarioId, grupoId: id } });
+            return res.json(oferta);
         } catch (error) {
             res.status(500).send(error);
         }
@@ -177,7 +188,9 @@ module.exports = {
                         [Op.gte]: hoje
                     }
                 },
-                include: [{ model: Usuario, as: 'caronaMotorista' }, { model: CaronaReposta, as: 'caronaResposta' }]
+                include: [
+                    { model: Usuario, as: 'caronaMotorista' },
+                    { model: CaronaReposta, as: 'caronaResposta' }]
             })
 
             const retorno = {

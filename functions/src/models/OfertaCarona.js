@@ -20,6 +20,7 @@ class OfertaCarona extends Model {
             quinta: DataTypes.BOOLEAN,
             sexta: DataTypes.BOOLEAN,
             sabado: DataTypes.BOOLEAN,
+            repetirSemanalmente: DataTypes.BOOLEAN
         }, {
             sequelize
         })

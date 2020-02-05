@@ -18,6 +18,9 @@ routes.post('/usuarios', UsuarioController.store);
 routes.get('/usuarios', UsuarioController.index);
 routes.get('/usuarios/:id/grupos', UsuarioController.grupos)
 routes.post('/usuarios/buscar-ou-criar', UsuarioController.buscarOuCriar)
+routes.get('/usuarios/:id/proximas-viagens/:grupoId', UsuarioController.proximasViagens)
+routes.post('/usuarios/aceitar-carona', UsuarioController.aceitarCarona)
+routes.post('/usuarios/recusar-carona', UsuarioController.recusarCarona)
 
 routes.post('/locais', LocalController.store);
 routes.get('/locais', LocalController.index);

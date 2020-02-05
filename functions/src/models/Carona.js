@@ -21,9 +21,10 @@ class Carona extends Model {
     }
 
     static associate(models) {
-        this.belongsTo(models.Grupo, { foreignKey: 'grupoId', as: 'caronaGrupo' });    
-        this.belongsTo(models.Usuario, { foreignKey: 'usuarioId', as: 'caronaMotorista' });        
+        this.belongsTo(models.Grupo, { foreignKey: 'grupoId', as: 'caronaGrupo' });
+        this.belongsTo(models.Usuario, { foreignKey: 'usuarioId', as: 'caronaMotorista' });
         this.hasMany(models.UsuarioCarona);
+        this.hasMany(models.CaronaResposta, { foreignKey: 'caronaId', as: 'caronaResposta' });
     }
 }
 

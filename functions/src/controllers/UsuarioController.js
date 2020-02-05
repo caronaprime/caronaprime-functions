@@ -1,13 +1,78 @@
 const Usuario = require('../models/Usuario');
 const Grupo = require('../models/Grupo');
 const Local = require('../models/Local');
+const Carona = require('../models/Carona');
+const CaronaResposta = require('../models/CaronaReposta');
 const MembroGrupo = require('../models/MembroGrupo');
+const { Op } = require('sequelize')
 
 module.exports = {
     async index(req, res) {
         const usuarios = await Usuario.findAll();
         return res.json(usuarios);
 
+    },
+    async recusarCarona(req, res) {
+        try {
+            const caronaId = req.body.caronaId;
+            const usuarioId = req.body.usuarioId;
+
+            const resposta = await CaronaResposta.create({
+                caronaId,
+                usuarioId,
+                aceitou: false
+            });
+            return res.json({ sucesso: true, resposta });
+        } catch (error) {
+            res.status(500).send(error);
+        }
+    },
+    async aceitarCarona(req, res) {
+        try {
+            const caronaId = req.body.caronaId;
+            const usuarioId = req.body.usuarioId;
+            const carona = await Carona.findByPk(caronaId);
+            const caronasRespostas = await CaronaResposta.findAll({ where: { aceitou: true, caronaId: caronaId } });
+
+            if (caronasRespostas.length >= carona.totalVagas)
+                return res.json({ sucesso: false, motivo: "Ja atingiu o limite de caroneiros." });
+
+            const jaAceitou = caronasRespostas.filter(resp => resp.usuarioId == usuarioId);
+            if (jaAceitou.length > 0)
+                return res.json({ sucesso: false, motivo: "O usuario já aceitou esta carona." });
+
+            const resposta = await CaronaResposta.create({
+                caronaId,
+                usuarioId,
+                aceitou: true
+            });
+            return res.json({ sucesso: true, resposta });
+        } catch (error) {
+            res.status(500).send(error);
+        }
+    },
+    async proximasViagens(req, res) {
+        try {
+            const grupoId = req.params.grupoId;
+            const usuarioId = req.params.id;
+
+            const hoje = new Date();
+            const resposta = await CaronaResposta.findAll({
+                where: {
+                    usuarioId: usuarioId,
+                    aceitou: true,
+                    '$caronaResposta.grupoId$': grupoId,
+                    '$caronaResposta.data$': {
+                        [Op.gte]: hoje
+                    }
+                },
+                include: [{ model: Carona, as: 'caronaResposta' }]
+            });
+
+            return res.json(resposta);
+        } catch (error) {
+            res.status(500).send(error);
+        }
     },
 
     async buscarOuCriar(req, res) {

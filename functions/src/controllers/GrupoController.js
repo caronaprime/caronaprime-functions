@@ -5,6 +5,8 @@ const LatLong = require('../models/LatLong');
 const Usuario = require('../models/Usuario');
 const OfertaCarona = require('../models/OfertaCarona');
 const Carona = require('../models/Carona');
+const CaronaReposta = require('../models/CaronaReposta');
+const { Op } = require('sequelize')
 
 async function buscarUsuarioId(usuario) {
     let usuarioId = usuario.UsuarioId;
@@ -167,7 +169,16 @@ module.exports = {
                     }
                 });
             }
-            const caronas = await Carona.findAll({ where: { grupoId: req.params.id }, include: [{ model: Usuario, as: 'caronaMotorista' }] })
+            const hoje = new Date();
+            const caronas = await Carona.findAll({
+                where: {
+                    grupoId: req.params.id,
+                    data: {
+                        [Op.gte]: hoje
+                    }
+                },
+                include: [{ model: Usuario, as: 'caronaMotorista' }, { model: CaronaReposta, as: 'caronaResposta' }]
+            })
 
             const retorno = {
                 Caronas: caronas,

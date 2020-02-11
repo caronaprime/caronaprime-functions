@@ -51,29 +51,6 @@ module.exports = {
             res.status(500).send(error);
         }
     },
-    // async proximasViagens(req, res) {
-    //     try {
-    //         const grupoId = req.params.grupoId;
-    //         const usuarioId = req.params.id;
-
-    //         const hoje = new Date();
-    //         const resposta = await CaronaResposta.findAll({
-    //             where: {
-    //                 usuarioId: usuarioId,
-    //                 aceitou: true,
-    //                 '$caronaResposta.grupoId$': grupoId,
-    //                 '$caronaResposta.data$': {
-    //                     [Op.gte]: hoje
-    //                 }
-    //             },
-    //             include: [{ model: Carona, as: 'caronaResposta' }]
-    //         });
-
-    //         return res.json(resposta);
-    //     } catch (error) {
-    //         res.status(500).send(error);
-    //     }
-    // },
 
     async proximasViagens(req, res) {
         try {
